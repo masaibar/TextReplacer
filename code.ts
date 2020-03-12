@@ -31,11 +31,11 @@ figma.ui.onmessage = async msg => {
     for (let item of figma.currentPage.children) { 
       if (item.type === "TEXT") {
         await figma.loadFontAsync({ family: item.fontName["family"], style: item.fontName["style"] })
-        console.log(item.name)
-        console.log(item.characters)
-        console.log(item.fontName)
-        console.log(item.fontName["family"])
-        console.log(item.fontName["style"])
+        // console.log(item.name)
+        // console.log(item.characters)
+        // console.log(item.fontName)
+        // console.log(item.fontName["family"])
+        // console.log(item.fontName["style"])
         item.characters = "fugafuga"
       }
     }
