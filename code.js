@@ -49,7 +49,10 @@ figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
         console.log("csv call");
         const lines = msg.lines;
         lines.forEach(line => {
-            console.log(line);
+            const keyValue = line.split(",");
+            const key = keyValue[0];
+            const value = keyValue[1];
+            console.log("key: " + key + ", value: " + value);
         });
         console.log("csv called");
     }

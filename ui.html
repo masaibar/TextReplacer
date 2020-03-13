@@ -27,10 +27,13 @@
             const lines = fileReader.result.split("\n")
             parent.postMessage({pluginMessage: {type: 'csv', lines}}, '*')
 
-            // lines.forEach(line => {
-            //     // console.log(line)
-            //     parent.postMessage({pluginMessage: {type: 'csv', line}}, '*')
-            // })
+            lines.forEach(line => {
+                // console.log(line)
+                // const keyValue = line.split(",")
+                // console.log(keyValue[0])
+                // console.log(keyValue[1])
+                // parent.postMessage({pluginMessage: {type: 'csv', line}}, '*')
+            })
         }
     }
 </script>
