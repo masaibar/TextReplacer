@@ -47,12 +47,16 @@ figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
     }
     if (msg.type === 'csv') {
         console.log("csv call");
-        const lines = msg.lines;
-        lines.forEach(line => {
+        const texts = figma.currentPage.children.filter(item => {
+            return item.type === "TEXT";
+        });
+        console.log(texts);
+        msg.lines.forEach(line => {
             const keyValue = line.split(",");
             const key = keyValue[0];
             const value = keyValue[1];
             console.log("key: " + key + ", value: " + value);
+            // TODO: textsの中からnameがkeyと同一のものを探し出して書き換える
         });
         console.log("csv called");
     }
