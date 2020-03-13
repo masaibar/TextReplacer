@@ -1,7 +1,6 @@
-<h2>Rectangle Creator</h2>
-<button id="rewrite">Rewrite</button>
-<button id="cancel">Cancel</button>
-<input id="input" type="file">
+<h2>Text Replacer</h2>
+<!--<button id="rewrite">Rewrite</button>-->
+<input id="input" type="file" accept=".csv">
 <script>
 
     // document.getElementById('create').onclick = () => {
@@ -10,13 +9,13 @@
     //   parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
     // }
 
-    document.getElementById('cancel').onclick = () => {
-        parent.postMessage({pluginMessage: {type: 'cancel'}}, '*')
-    }
+    // document.getElementById('cancel').onclick = () => {
+    //     parent.postMessage({pluginMessage: {type: 'cancel'}}, '*')
+    // }
 
-    document.getElementById('rewrite').onclick = () => {
-        parent.postMessage({pluginMessage: {type: 'rewrite'}}, '*')
-    }
+    // document.getElementById('rewrite').onclick = () => {
+    //     parent.postMessage({pluginMessage: {type: 'rewrite'}}, '*')
+    // }
 
     const input = document.getElementById("input")
     input.addEventListener('change', function (e) {
