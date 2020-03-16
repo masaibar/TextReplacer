@@ -12,36 +12,35 @@ figma.showUI(__html__);
 // callback. The callback will be passed the "pluginMessage" property of the
 // posted message.
 figma.ui.onmessage = async msg => {
-  // One way of distinguishing between different types of messages sent from
-  // your HTML page is to use an object with a "type" property like this.
-  if (msg.type === 'create-rectangles') {
-    const nodes: SceneNode[] = [];
-    for (let i = 0; i < msg.count; i++) {
-      const rect = figma.createRectangle();
-      rect.x = i * 150;
-      rect.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-      figma.currentPage.appendChild(rect);
-      nodes.push(rect);
-    }
-    figma.currentPage.selection = nodes;
-    figma.viewport.scrollAndZoomIntoView(nodes);
-  }
+    // One way of distinguishing between different types of messages sent from
+    // your HTML page is to use an object with a "type" property like this.
 
-  if (msg.type === 'rewrite') { 
-    for (let item of figma.currentPage.children) { 
-      if (item.type === "TEXT") {
-        await figma.loadFontAsync({ family: item.fontName["family"], style: item.fontName["style"] })
-        console.log(item.name)
-        console.log(item.characters)
-        console.log(item.fontName)
-        console.log(item.fontName["family"])
-        console.log(item.fontName["style"])
-        item.characters = "fugafuga"
-      }
-    }
-  }
+    if (msg.type === 'tsv') {
+        const texts = figma.currentPage.children.filter(item => {
+            return item.type === "TEXT"
+        }) as TextNode[]
 
-  // Make sure to close the plugin when you're done. Otherwise the plugin will
-  // keep running, which shows the cancel button at the bottom of the screen.
-  figma.closePlugin();
+        console.log(texts)
+
+        for (const line of msg.lines) {
+            const pair = line.split("\t")
+            const key = pair[0]
+            const value = pair[1]
+
+            console.log("key: " + key + ", value: " + value)
+
+            const targets = texts.filter(text => {
+                return text.name === key
+            })
+
+            for (let target of targets) {
+                await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]})
+                target.characters = value
+            }
+        }
+    }
+
+    // Make sure to close the plugin when you're done. Otherwise the plugin will
+    // keep running, which shows the cancel button at the bottom of the screen.
+    figma.closePlugin();
 };
