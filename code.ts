@@ -15,9 +15,7 @@ figma.ui.onmessage = async msg => {
     // One way of distinguishing between different types of messages sent from
     // your HTML page is to use an object with a "type" property like this.
 
-    if (msg.type === 'csv') {
-        console.log("csv call")
-
+    if (msg.type === 'tsv') {
         const texts = figma.currentPage.children.filter(item => {
             return item.type === "TEXT"
         }) as TextNode[]
@@ -25,9 +23,9 @@ figma.ui.onmessage = async msg => {
         console.log(texts)
 
         for (const line of msg.lines) {
-            const keyValue = line.split(",")
-            const key = keyValue[0]
-            const value = keyValue[1]
+            const pair = line.split("\t")
+            const key = pair[0]
+            const value = pair[1]
 
             console.log("key: " + key + ", value: " + value)
 
@@ -40,7 +38,6 @@ figma.ui.onmessage = async msg => {
                 target.characters = value
             }
         }
-        console.log("csv called")
     }
 
     // Make sure to close the plugin when you're done. Otherwise the plugin will

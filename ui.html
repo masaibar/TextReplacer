@@ -1,5 +1,5 @@
 <h2>Text Replacer</h2>
-<input id="input" type="file" accept=".csv">
+<input id="input" type="file" accept=".tsv">
 <script>
     const input = document.getElementById("input")
 
@@ -9,7 +9,7 @@
         fileReader.readAsText(fileData)
         fileReader.onload = () => {
             const lines = fileReader.result.split("\n")
-            parent.postMessage({pluginMessage: {type: 'csv', lines}}, '*')
+            parent.postMessage({pluginMessage: {type: 'tsv', lines}}, '*')
         }
     }
 </script>

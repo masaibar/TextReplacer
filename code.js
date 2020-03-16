@@ -20,16 +20,15 @@ figma.showUI(__html__);
 figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
     // One way of distinguishing between different types of messages sent from
     // your HTML page is to use an object with a "type" property like this.
-    if (msg.type === 'csv') {
-        console.log("csv call");
+    if (msg.type === 'tsv') {
         const texts = figma.currentPage.children.filter(item => {
             return item.type === "TEXT";
         });
         console.log(texts);
         for (const line of msg.lines) {
-            const keyValue = line.split(",");
-            const key = keyValue[0];
-            const value = keyValue[1];
+            const pair = line.split("\t");
+            const key = pair[0];
+            const value = pair[1];
             console.log("key: " + key + ", value: " + value);
             const targets = texts.filter(text => {
                 return text.name === key;
@@ -39,7 +38,6 @@ figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
                 target.characters = value;
             }
         }
-        console.log("csv called");
     }
     // Make sure to close the plugin when you're done. Otherwise the plugin will
     // keep running, which shows the cancel button at the bottom of the screen.
