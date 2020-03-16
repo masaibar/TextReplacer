@@ -1,22 +1,6 @@
 <h2>Text Replacer</h2>
-<!--<button id="rewrite">Rewrite</button>-->
 <input id="input" type="file" accept=".csv">
 <script>
-
-    // document.getElementById('create').onclick = () => {
-    //   const textbox = document.getElementById('count');
-    //   const count = parseInt(textbox.value, 10);
-    //   parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
-    // }
-
-    // document.getElementById('cancel').onclick = () => {
-    //     parent.postMessage({pluginMessage: {type: 'cancel'}}, '*')
-    // }
-
-    // document.getElementById('rewrite').onclick = () => {
-    //     parent.postMessage({pluginMessage: {type: 'rewrite'}}, '*')
-    // }
-
     const input = document.getElementById("input")
 
     input.onchange = (event) => {
@@ -26,15 +10,6 @@
         fileReader.onload = () => {
             const lines = fileReader.result.split("\n")
             parent.postMessage({pluginMessage: {type: 'csv', lines}}, '*')
-
-            // for debug
-            // lines.forEach(line => {
-                // console.log(line)
-                // const keyValue = line.split(",")
-                // console.log(keyValue[0])
-                // console.log(keyValue[1])
-                // parent.postMessage({pluginMessage: {type: 'csv', line}}, '*')
-            // })
         }
     }
 </script>
