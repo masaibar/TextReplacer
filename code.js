@@ -29,16 +29,47 @@ figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
             const pair = line.split("\t");
             hash[pair[0]] = pair[1];
         }
+        console.log(hash);
         const targetTexts = allTexts.filter(text => {
             return hash[text.name];
         });
-        for (let target of targetTexts) {
-            const beforeCharacters = target.characters;
-            yield figma.loadFontAsync({ family: target.fontName["family"], style: target.fontName["style"] });
-            target.characters = hash[target.name];
-            console.log(target.name + " replaced: " + beforeCharacters + " -> " + target.characters);
+        for (const target of targetTexts) {
+            console.log("[Start] id: " + target.id + ", name: " + target.name + ", characters: " + target.characters);
+            let beforeCharacters = target.characters;
+            console.log("[Hash]: " + hash[target.name]);
+            if (beforeCharacters === hash[target.name]) {
+                continue;
+            }
+            else {
+                try {
+                    yield figma.loadFontAsync({ family: target.fontName["family"], style: target.fontName["style"] });
+                }
+                catch (error) {
+                    console.log("loadFontAsync failed. " + target.id + " , " + error);
+                }
+                target.characters = hash[target.name];
+            }
+            console.log("[End] id: " + target.id);
         }
     }
+    // for (const item of targetTexts) {
+    //     console.log("id: " + item.id + ", name: " + item.name + ", characters: " + item.characters)
+    //     await figma.loadFontAsync({family: item.fontName["family"], style: item.fontName["style"]})
+    //     item.characters = hash[item.name]
+    // }
+    // for (let target of targetTexts) {
+    //     const beforeCharacters = target.characters
+    //     if (beforeCharacters === hash[target.name]) {
+    //         console.log("[" + target.id + "] " +  target.name + " skipped. ====")
+    //         continue
+    //     } else {
+    //         console.log("[" + target.id + "] " + target.name + " has difference.")
+    //     await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]})
+    //     target.characters = hash[target.name]
+    //
+    //     console.log(target.name + " replaced: " + beforeCharacters + " -> " + hash[target.name])
+    //     }
+    // }
     // Make sure to close the plugin when you're done. Otherwise the plugin will
     // keep running, which shows the cancel button at the bottom of the screen.
     figma.closePlugin();
