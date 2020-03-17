@@ -6,6 +6,8 @@
 // full browser enviroment (see documentation).
 
 // This shows the HTML page in "ui.html".
+import has = Reflect.has;
+
 figma.showUI(__html__);
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
@@ -16,27 +18,27 @@ figma.ui.onmessage = async msg => {
     // your HTML page is to use an object with a "type" property like this.
 
     if (msg.type === 'tsv') {
-        const texts = figma.currentPage.children.filter(item => {
+        const allTexts = figma.currentPage.findAll().filter(item => {
             return item.type === "TEXT"
         }) as TextNode[]
 
-        console.log(texts)
+        let hash: { [index: string]: string } = {}
 
         for (const line of msg.lines) {
             const pair = line.split("\t")
-            const key = pair[0]
-            const value = pair[1]
+            hash[pair[0]] = pair[1]
+        }
 
-            console.log("key: " + key + ", value: " + value)
+        const targetTexts = allTexts.filter(text => {
+            return hash[text.name]
+        })
 
-            const targets = texts.filter(text => {
-                return text.name === key
-            })
+        for (let target of targetTexts) {
+            const beforeCharacters = target.characters
+            await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]})
+            target.characters = hash[target.name]
 
-            for (let target of targets) {
-                await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]})
-                target.characters = value
-            }
+            console.log(target.name + " replaced: " + beforeCharacters + " -> " + target.characters)
         }
     }
 

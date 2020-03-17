@@ -21,22 +21,22 @@ figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
     // One way of distinguishing between different types of messages sent from
     // your HTML page is to use an object with a "type" property like this.
     if (msg.type === 'tsv') {
-        const texts = figma.currentPage.children.filter(item => {
+        const allTexts = figma.currentPage.findAll().filter(item => {
             return item.type === "TEXT";
         });
-        console.log(texts);
+        let hash = {};
         for (const line of msg.lines) {
             const pair = line.split("\t");
-            const key = pair[0];
-            const value = pair[1];
-            console.log("key: " + key + ", value: " + value);
-            const targets = texts.filter(text => {
-                return text.name === key;
-            });
-            for (let target of targets) {
-                yield figma.loadFontAsync({ family: target.fontName["family"], style: target.fontName["style"] });
-                target.characters = value;
-            }
+            hash[pair[0]] = pair[1];
+        }
+        const targetTexts = allTexts.filter(text => {
+            return hash[text.name];
+        });
+        for (let target of targetTexts) {
+            const beforeCharacters = target.characters;
+            yield figma.loadFontAsync({ family: target.fontName["family"], style: target.fontName["style"] });
+            target.characters = hash[target.name];
+            console.log(target.name + " replaced: " + beforeCharacters + " -> " + target.characters);
         }
     }
     // Make sure to close the plugin when you're done. Otherwise the plugin will
