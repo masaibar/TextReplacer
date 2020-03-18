@@ -5,9 +5,6 @@
 // You can access browser APIs in the <script> tag inside "ui.html" which has a
 // full browser enviroment (see documentation).
 
-// This shows the HTML page in "ui.html".
-import has = Reflect.has;
-
 figma.showUI(__html__);
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
@@ -26,7 +23,7 @@ figma.ui.onmessage = async msg => {
 
         for (const line of msg.lines) {
             const pair = line.split("\t");
-            hash[pair[0]] = pair[1]
+            hash[pair[0]] = pair[1].trim()
         }
 
         console.log(hash);
@@ -35,44 +32,24 @@ figma.ui.onmessage = async msg => {
             return hash[text.name]
         });
 
+        //TODO: 結果を返して視覚的に見えるようにしてあげると親切かも、例外発生時もその旨を
         for (const target of targetTexts) {
-            console.log("[Start] id: " + target.id + ", name: " + target.name + ", characters: " + target.characters)
             let beforeCharacters = target.characters;
-            console.log("[Hash]: " + hash[target.name]);
-            if (beforeCharacters === hash[target.name]) {
+            if (beforeCharacters == hash[target.name]) {
+                console.log("[Skipped] id: " + target.id + ", name: " + target.name + ", characters: " + target.characters)
                 continue;
-            } else {
-                try {
-                    await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]})
-                } catch (error) {
-                    console.log("loadFontAsync failed. " + target.id + " , " + error)
-                }
-
-                target.characters = hash[target.name];
             }
-            console.log("[End] id: " + target.id)
+
+            try {
+                console.log("[Difference] ["+ target.characters + "] : [" + hash[target.name] +"]")
+                console.log("[Replace] id: " + target.id + ", name: " + target.name + ", characters: " + target.characters)
+                await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]})
+                target.characters = hash[target.name];
+            } catch (error) {
+                console.log("loadFontAsync failed. " + target.id + " , " + error)
+            }
         }
     }
-    // for (const item of targetTexts) {
-    //     console.log("id: " + item.id + ", name: " + item.name + ", characters: " + item.characters)
-    //     await figma.loadFontAsync({family: item.fontName["family"], style: item.fontName["style"]})
-    //     item.characters = hash[item.name]
-    // }
-
-    // for (let target of targetTexts) {
-    //     const beforeCharacters = target.characters
-    //     if (beforeCharacters === hash[target.name]) {
-    //         console.log("[" + target.id + "] " +  target.name + " skipped. ====")
-    //         continue
-    //     } else {
-    //         console.log("[" + target.id + "] " + target.name + " has difference.")
-    //     await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]})
-    //     target.characters = hash[target.name]
-    //
-    //     console.log(target.name + " replaced: " + beforeCharacters + " -> " + hash[target.name])
-    //     }
-    // }
-
 
 // Make sure to close the plugin when you're done. Otherwise the plugin will
 // keep running, which shows the cancel button at the bottom of the screen.
