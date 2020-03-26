@@ -26,6 +26,9 @@ figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
         let hash = {};
         for (const line of msg.lines) {
             const pair = line.split("\t");
+            if (pair.length != 2) {
+                continue;
+            }
             hash[pair[0]] = pair[1].trim();
         }
         console.log(hash);

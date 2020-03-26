@@ -23,6 +23,9 @@ figma.ui.onmessage = async msg => {
 
         for (const line of msg.lines) {
             const pair = line.split("\t");
+            if(pair.length != 2) {
+                continue
+            }
             hash[pair[0]] = pair[1].trim()
         }
 
