@@ -32,7 +32,7 @@ figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
         const targetTexts = allTexts.filter(text => {
             return hash[text.name];
         });
-        //TODO: 結果を返して視覚的に見えるようにしてあげると親切かも、例外発生時もその旨を
+        //本来は結果を返して視覚的に見えるようにしてあげると親切かも、例外発生時もその旨を伝えたい
         for (const target of targetTexts) {
             let beforeCharacters = target.characters;
             if (beforeCharacters == hash[target.name]) {

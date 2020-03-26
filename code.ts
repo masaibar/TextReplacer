@@ -32,18 +32,18 @@ figma.ui.onmessage = async msg => {
             return hash[text.name]
         });
 
-        //TODO: 結果を返して視覚的に見えるようにしてあげると親切かも、例外発生時もその旨を
+        //本来は結果を返して視覚的に見えるようにしてあげると親切かも、例外発生時もその旨を伝えたい
         for (const target of targetTexts) {
             let beforeCharacters = target.characters;
             if (beforeCharacters == hash[target.name]) {
-                console.log("[Skipped] id: " + target.id + ", name: " + target.name + ", characters: " + target.characters)
+                console.log("[Skipped] id: " + target.id + ", name: " + target.name + ", characters: " + target.characters);
                 continue;
             }
 
             try {
-                console.log("[Difference] ["+ target.characters + "] : [" + hash[target.name] +"]")
-                console.log("[Replace] id: " + target.id + ", name: " + target.name + ", characters: " + target.characters)
-                await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]})
+                console.log("[Difference] ["+ target.characters + "] : [" + hash[target.name] +"]");
+                console.log("[Replace] id: " + target.id + ", name: " + target.name + ", characters: " + target.characters);
+                await figma.loadFontAsync({family: target.fontName["family"], style: target.fontName["style"]});
                 target.characters = hash[target.name];
             } catch (error) {
                 console.log("loadFontAsync failed. " + target.id + " , " + error)

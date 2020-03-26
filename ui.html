@@ -1,14 +1,14 @@
 <h2>Text Replacer</h2>
 <input id="input" type="file" accept=".tsv">
 <script>
-    const input = document.getElementById("input")
+    const input = document.getElementById("input");
 
     input.onchange = (event) => {
-        const fileData = event.target["files"][0]
-        const fileReader = new FileReader()
-        fileReader.readAsText(fileData)
+        const fileData = event.target["files"][0];
+        const fileReader = new FileReader();
+        fileReader.readAsText(fileData);
         fileReader.onload = () => {
-            const lines = fileReader.result.split("\n")
+            const lines = fileReader.result.split("\n");
             parent.postMessage({pluginMessage: {type: 'tsv', lines}}, '*')
         }
     }
